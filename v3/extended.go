@@ -70,15 +70,15 @@ func (l *Conn) Extended(er *ExtendedRequest) (*ExtendedResponse, error) {
 		return nil, err
 	}
 
-	if len(packet.Children[1].Children) < 4 {
+	if len(packet.Children[1].Children) < 3 {
 		return nil, fmt.Errorf(
-			"ldap: malformed extended response: expected 4 children, got %d",
+			"ldap: malformed extended response: expected 3 children, got %d",
 			len(packet.Children),
 		)
 	}
 
 	response := &ExtendedResponse{
-		Name:     packet.Children[1].Children[3].Data.String(),
+		Name:     packet.Children[1].Children[2].Data.String(),
 		Controls: make([]Control, 0),
 	}
 
@@ -92,8 +92,8 @@ func (l *Conn) Extended(er *ExtendedRequest) (*ExtendedResponse, error) {
 		}
 	}
 
-	if len(packet.Children[1].Children) == 5 {
-		response.Value = packet.Children[1].Children[4]
+	if len(packet.Children[1].Children) == 4 {
+		response.Value = packet.Children[1].Children[3]
 	}
 
 	return response, nil
